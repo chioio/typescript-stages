@@ -1,0 +1,8 @@
+{
+  "name": "typescript-stages",
+  "version": "1.0.0",
+  "author": "Tenn Chio <Tenn_Chio@icloud.com>",
+  "devDependencies": {
+    "typescript": "^4.0.3"
+  }
+}
