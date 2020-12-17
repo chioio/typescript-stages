@@ -3,7 +3,9 @@
     "target": "ES2020",
     "noImplicitAny": true,
     "removeComments": true,
+    "noImplicitThis": true,
     "preserveConstEnums": true,
+    "strictNullChecks": true,
     "sourceMap": true,
   }
 }
