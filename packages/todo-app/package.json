@@ -1,0 +1,9 @@
+{
+  "name": "todo-app",
+  "version": "1.0.0",
+  "description": "Using TypeScript to build a Todo App.",
+  "main": "index.js",
+  "author": "Tenn Chio",
+  "license": "MIT",
+  "private": true
+}
