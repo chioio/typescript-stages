@@ -6,11 +6,11 @@ export function LoadAppStateFromLocalStorage(): AppState {
   )
 
   if (typeof stringifiedJSON === 'string') {
-    const LoadedAppState: AppState = JSON.parse(stringifiedJSON)
-    return LoadedAppState
+    const LoadedAppData: AppState = JSON.parse(stringifiedJSON)
+    return LoadedAppData
   }
 
-  const BlankAppState: AppState = { todoList: [] }
+  const BlankAppData: AppState = { todos: [] }
 
-  return BlankAppState
+  return BlankAppData
 }

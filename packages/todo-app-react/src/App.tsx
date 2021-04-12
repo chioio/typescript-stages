@@ -1,10 +1,13 @@
-import { useState, useEffect } from 'react'
+import { useEffect, useReducer, useContext } from 'react'
+import { LocalStorageKey } from './TodoData'
 import NewTodoTextInput from './components/NewTodoTextInput'
-import { AppState, LocalStorageKey } from './TodoData'
+import TodoAppContext from './context/TodoAppContext'
+import AppReducer from './store/AppStore'
 import styles from './App.module.css'
 
 const App = () => {
-  const [appState = { todoList: [] }, setAppState] = useState<AppState>()
+  const { appData } = useContext(TodoAppContext)
+  const [ appState, dispatch ] = useReducer<typeof AppReducer>(AppReducer, appData)
   useEffect((): void => {
     window.localStorage.setItem(
       LocalStorageKey.APP_TODOS,
@@ -13,12 +16,14 @@ const App = () => {
   }, [appState])
 
   return (
-    <div className={styles.Container}>
-      <header className={styles.Header}>
-        <h1 className={styles.Title}>Todos</h1>
-        <NewTodoTextInput todos={appState.todoList} />
-      </header>
-    </div>
+    <TodoAppContext.Provider value={{ appData: appState, dispatch }}>
+      <div className={styles.Container}>
+        <header className={styles.Header}>
+          <h1 className={styles.Title}>Todos</h1>
+          <NewTodoTextInput />
+        </header>
+      </div>
+    </TodoAppContext.Provider>
   )
 }
 

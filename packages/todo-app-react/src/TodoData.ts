@@ -6,8 +6,13 @@ export type Todo = {
   done: boolean
 }
 
+export interface AppAction {
+  type: 'newTodo',
+  newTodo: Todo
+}
+
 export interface AppState {
-  todoList: Todo[]
+  todos: Todo[]
 }
 
 export enum LocalStorageKey {

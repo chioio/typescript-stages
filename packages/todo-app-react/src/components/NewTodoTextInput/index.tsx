@@ -1,13 +1,16 @@
-import React, { createRef, useState } from 'react'
+import React, { createRef, useContext } from 'react'
 import { Todo } from '../../TodoData'
+import TodoAppContext from '../../context/TodoAppContext'
 import styles from './index.module.css'
 
-const NewTodoTextInput = ({ todos }: { todos: Todo[] }) => {
-  const [todosState, setTodosState] = useState<Todo[]>(todos)
+const NewTodoTextInput = () => {
+  const { appData, dispatch } = useContext(TodoAppContext)
+  // const [todosState, setTodosState] = useState<Todo[]>(appData.todos)
+
   const textInput: React.RefObject<HTMLInputElement> = createRef<HTMLInputElement>()
 
-  const generateId = (): number =>
-    todos.length > 0 ? Math.max(...todos.map((item) => item.id + 1)) : 1
+  const generateId = (): number => 
+    appData.todos.length > 0 ? Math.max(...appData.todos.map((item) => item.id + 1)) : 1
 
   const addTodo = (e: React.KeyboardEvent<HTMLInputElement>): void => {
     if (textInput.current === null) return
@@ -20,7 +23,11 @@ const NewTodoTextInput = ({ todos }: { todos: Todo[] }) => {
       }
 
       // add new TODO to entire TodoList
-      setTodosState([todo, ...todosState])
+      // setTodosState([todo, ...todosState])
+      dispatch({
+        type: 'newTodo',
+        newTodo: todo
+      })
 
       // reset text input UI value
       textInput.current.value = ''
