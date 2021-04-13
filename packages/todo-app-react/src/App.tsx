@@ -1,13 +1,19 @@
 import { useEffect, useReducer, useContext } from 'react'
 import { LocalStorageKey } from './TodoData'
 import NewTodoTextInput from './components/NewTodoTextInput'
+import Copyright from './components/Footer'
 import TodoAppContext from './context/TodoAppContext'
 import AppReducer from './store/AppStore'
-import styles from './App.module.css'
+import Header from './components/Header'
+import { Layout } from './App.style'
 
 const App = () => {
   const { appData } = useContext(TodoAppContext)
-  const [ appState, dispatch ] = useReducer<typeof AppReducer>(AppReducer, appData)
+  const [appState, dispatch] = useReducer<typeof AppReducer>(
+    AppReducer,
+    appData
+  )
+
   useEffect((): void => {
     window.localStorage.setItem(
       LocalStorageKey.APP_TODOS,
@@ -16,14 +22,20 @@ const App = () => {
   }, [appState])
 
   return (
-    <TodoAppContext.Provider value={{ appData: appState, dispatch }}>
-      <div className={styles.Container}>
-        <header className={styles.Header}>
-          <h1 className={styles.Title}>Todos</h1>
+    <Layout>
+      <Header />
+      <section className="todo-app">
+        <TodoAppContext.Provider value={{ appData: appState, dispatch }}>
           <NewTodoTextInput />
-        </header>
-      </div>
-    </TodoAppContext.Provider>
+          <div className="todos-list">
+            {appState.todos.map((todo, index) => (
+              <h2 key={index}>{todo.text}</h2>
+            ))}
+          </div>
+        </TodoAppContext.Provider>
+      </section>
+      <Copyright />
+    </Layout>
   )
 }
 

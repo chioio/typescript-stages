@@ -8,7 +8,7 @@ export type Todo = {
 
 export interface AppAction {
   type: 'newTodo',
-  newTodo: Todo
+  todo: Todo
 }
 
 export interface AppState {
