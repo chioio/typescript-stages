@@ -1,4 +1,4 @@
-import { AppState, LocalStorageKey } from '../TodoData'
+import { AppState, LocalStorageKey } from '../typings'
 
 export function LoadAppStateFromLocalStorage(): AppState {
   const stringifiedJSON: string | null = window.localStorage.getItem(

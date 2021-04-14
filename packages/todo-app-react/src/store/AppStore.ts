@@ -1,8 +1,8 @@
-import { AppState, AppAction } from '../TodoData'
+import { AppState, AppAction } from '../typings'
 
 const reducer = (state: AppState, action: AppAction) => {
   switch (action.type) {
-    case 'newTodo':
+    case 'NEW_TODO':
       const todos = [action.todo, ...state.todos]  
       return {
         ...state,

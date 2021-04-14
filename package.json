@@ -4,7 +4,6 @@
   "author": "Tenn Chio <Tenn_Chio@icloud.com>",
   "license": "MIT",
   "devDependencies": {
-    "@types/styled-components": "^5.1.9",
     "typescript": "^4.0.3"
   }
 }

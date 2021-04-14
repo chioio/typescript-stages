@@ -1,6 +1,14 @@
 import styled from 'styled-components'
 
-const Header = styled.header`
+const Header =  () => {
+  return (
+    <Layout>
+      <h1>Todos</h1>
+    </Layout>
+  )
+}
+
+const Layout = styled.header`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -14,10 +22,4 @@ const Header = styled.header`
   }
 `
 
-export default () => {
-  return (
-    <Header>
-      <h1>Todos</h1>
-    </Header>
-  )
-}
+export default Header

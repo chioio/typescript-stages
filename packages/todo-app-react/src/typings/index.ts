@@ -1,4 +1,4 @@
-import { LoadAppStateFromLocalStorage } from "./utils"
+import { LoadAppStateFromLocalStorage } from "../utils"
 
 export type Todo = {
   id: number
@@ -6,8 +6,14 @@ export type Todo = {
   done: boolean
 }
 
+export interface AppRoutes {
+  all: '/',
+  active: '/active',
+  completed: '/completed'
+}
+
 export interface AppAction {
-  type: 'newTodo',
+  type: 'NEW_TODO',
   todo: Todo
 }
 

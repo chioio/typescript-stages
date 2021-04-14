@@ -1,17 +1,18 @@
 import { useEffect, useReducer, useContext } from 'react'
-import { LocalStorageKey } from './TodoData'
+import { LocalStorageKey } from './typings'
 import NewTodoTextInput from './components/NewTodoTextInput'
 import Copyright from './components/Footer'
 import TodoAppContext from './context/TodoAppContext'
 import AppReducer from './store/AppStore'
 import Header from './components/Header'
-import { Layout } from './App.style'
+import styled from 'styled-components'
+import TodoList from './components/TodoList'
 
 const App = () => {
-  const { appData } = useContext(TodoAppContext)
+  const { appContext } = useContext(TodoAppContext)
   const [appState, dispatch] = useReducer<typeof AppReducer>(
     AppReducer,
-    appData
+    appContext
   )
 
   useEffect((): void => {
@@ -24,19 +25,31 @@ const App = () => {
   return (
     <Layout>
       <Header />
-      <section className="todo-app">
-        <TodoAppContext.Provider value={{ appData: appState, dispatch }}>
+      <TodoApp>
+        <TodoAppContext.Provider value={{ appContext: appState, dispatch }}>
           <NewTodoTextInput />
-          <div className="todos-list">
-            {appState.todos.map((todo, index) => (
-              <h2 key={index}>{todo.text}</h2>
-            ))}
-          </div>
+          <TodoList />
         </TodoAppContext.Provider>
-      </section>
+      </TodoApp>
       <Copyright />
     </Layout>
   )
 }
+
+const Layout = styled.div`
+  min-height: 100vh;
+  background-color: #282c34;
+  padding: 0 25%;
+`
+
+const TodoApp = styled.section`
+  .todo-app {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+  }
+`
 
 export default App
