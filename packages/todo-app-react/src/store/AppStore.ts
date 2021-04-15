@@ -1,9 +1,16 @@
-import { AppState, AppAction } from '../typings'
+import { Todo, AppState, AppAction } from 'src/typings'
 
 const reducer = (state: AppState, action: AppAction) => {
+  let todos: Todo[] = []
   switch (action.type) {
     case 'NEW_TODO':
-      const todos = [action.todo, ...state.todos]  
+      todos = [action.todo, ...state.todos]
+      return {
+        ...state,
+        todos
+      }
+    case 'REMOVE_TODO':
+      todos = action.todos
       return {
         ...state,
         todos,

@@ -53,7 +53,7 @@ const Layout = styled.div`
   input {
     width: inherit;
     padding: 0.35rem 1rem;
-    background-color: #ffffff30;
+    background-color: #50545a;
     color: #fff;
     font-size: 1.25rem;
     font-family: inherit;
@@ -69,7 +69,7 @@ const Layout = styled.div`
       outline: none;
       padding: 0.15rem 0.8rem;
       border: #ff8945 dashed 0.2rem;
-      background-color: #ffffff10;
+      background-color: #505454;
     }
   }
 `

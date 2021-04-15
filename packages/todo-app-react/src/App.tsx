@@ -1,5 +1,5 @@
 import { useEffect, useReducer, useContext } from 'react'
-import { LocalStorageKey } from './typings'
+import { AppState, LocalStorageKey } from './typings'
 import NewTodoTextInput from './components/NewTodoTextInput'
 import Copyright from './components/Footer'
 import TodoAppContext from './context/TodoAppContext'
@@ -39,17 +39,18 @@ const App = () => {
 const Layout = styled.div`
   min-height: 100vh;
   background-color: #282c34;
-  padding: 0 25%;
+  padding: 0 15%;
 `
 
 const TodoApp = styled.section`
-  .todo-app {
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    justify-content: center;
-    position: relative;
-  }
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  max-width: 35rem;
+  margin: 0 auto;
+  position: relative;
+  box-sizing: border-box;
 `
 
 export default App
