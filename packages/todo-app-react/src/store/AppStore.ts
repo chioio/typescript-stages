@@ -7,9 +7,21 @@ const reducer = (state: AppState, action: AppAction) => {
       todos = [action.todo, ...state.todos]
       return {
         ...state,
-        todos
+        todos,
       }
-    case 'REMOVE_TODO':
+    case 'EDITED_TODO':
+      todos = action.todos
+      return {
+        ...state,
+        todos,
+      }
+    case 'REMOVED_TODO':
+      todos = action.todos
+      return {
+        ...state,
+        todos,
+      }
+    case 'COMPLETED_TODOS':
       todos = action.todos
       return {
         ...state,

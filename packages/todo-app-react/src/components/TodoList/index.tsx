@@ -1,6 +1,13 @@
-import { useContext } from 'react'
-import TodoAppContext from '../../context/TodoAppContext'
+import { useContext, useReducer } from 'react'
+import { Todo, AppRoutes } from 'src/typings'
+import AppContext from 'src/context/TodoAppContext'
+import AppReducer from 'src/store/AppStore'
 import styled from 'styled-components'
+import TodoItem from './TodoItem'
+
+interface Props {
+  path: AppRoutes
+}
 
 const Filter = () => {
   return (
@@ -24,8 +31,9 @@ const Filter = () => {
   )
 }
 
-const TodoList = () => {
-  const { appContext } = useContext(TodoAppContext)
+const TodoList: React.FC<Props> = ({ path }) => {
+  const { appContext } = useContext(AppContext)
+  const [appState, dispatch] = useReducer(AppReducer, appContext)
 
   return (
     <Layout>
@@ -42,9 +50,24 @@ const TodoList = () => {
         </span>
       </div>
       {/* Todo Item List */}
-      {appContext.todos.map((todo, index) => (
-        <h2 key={index}>{todo.text}</h2>
-      ))}
+      <ul className="todo-list">
+        {appState.todos
+          .filter((todo: Todo): boolean => {
+            switch (path) {
+              case AppRoutes.ALL:
+                return true
+              case AppRoutes.ACTIVE:
+                return todo.completed === false
+              case AppRoutes.COMPLETED:
+                return todo.completed === true
+              default:
+                return true
+            }
+          })
+          .map((todo: Todo) => {
+            return <TodoItem key={todo.id} todo={todo} />
+          })}
+      </ul>
       {/* Bottom Features */}
       <div className="bottom-features">
         <span>{appContext.todos.length} items left</span>

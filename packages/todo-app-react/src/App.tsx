@@ -1,14 +1,18 @@
 import { useEffect, useReducer, useContext } from 'react'
-import { AppState, LocalStorageKey } from './typings'
+import { LocalStorageKey, AppRoutes } from './typings'
 import NewTodoTextInput from './components/NewTodoTextInput'
 import Copyright from './components/Footer'
 import TodoAppContext from './context/TodoAppContext'
 import AppReducer from './store/AppStore'
 import Header from './components/Header'
-import styled from 'styled-components'
 import TodoList from './components/TodoList'
+import styled from 'styled-components'
 
-const App = () => {
+interface Props {
+  path: AppRoutes
+}
+
+const App: React.FC<Props> = ({ path }) => {
   const { appContext } = useContext(TodoAppContext)
   const [appState, dispatch] = useReducer<typeof AppReducer>(
     AppReducer,
@@ -28,7 +32,7 @@ const App = () => {
       <TodoApp>
         <TodoAppContext.Provider value={{ appContext: appState, dispatch }}>
           <NewTodoTextInput />
-          <TodoList />
+          <TodoList path={path} />
         </TodoAppContext.Provider>
       </TodoApp>
       <Copyright />

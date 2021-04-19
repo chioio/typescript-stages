@@ -19,8 +19,8 @@ const NewTodoTextInput = () => {
       // make new TODO object
       const todo: Todo = {
         id: generateId(),
-        text: textInput.current.value,
-        done: false,
+        content: textInput.current.value,
+        completed: false,
       }
 
       // add new TODO to entire Todo list

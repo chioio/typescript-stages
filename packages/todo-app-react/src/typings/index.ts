@@ -2,15 +2,13 @@ import { LoadAppStateFromLocalStorage } from '../utils'
 
 export type Todo = {
   id: number
-  text: string
-  done: boolean
+  content: string
+  completed: boolean
 }
 
-export interface AppRoutes {
-  all: '/'
-  active: '/active'
-  completed: '/completed'
-}
+export type TodoList = Todo[]
+
+export type RouteList = string[]
 
 export type AppAction =
   | {
@@ -18,12 +16,26 @@ export type AppAction =
       todo: Todo
     }
   | {
-      type: 'REMOVE_TODO'
-      todos: Todo[]
+      type: 'EDITED_TODO'
+      todos: TodoList
+    }
+  | {
+      type: 'REMOVED_TODO'
+      todos: TodoList
+    }
+  | {
+      type: 'COMPLETED_TODOS'
+      todos: TodoList
     }
 
 export interface AppState {
-  todos: Todo[]
+  todos: TodoList
+}
+
+export enum AppRoutes {
+  ALL = '/',
+  ACTIVE = '/active',
+  COMPLETED = '/completed',
 }
 
 export enum LocalStorageKey {

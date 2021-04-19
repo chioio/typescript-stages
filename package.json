@@ -3,6 +3,13 @@
   "version": "1.0.0",
   "author": "Tenn Chio <Tenn_Chio@icloud.com>",
   "license": "MIT",
+  "private": true,
+  "workspaces": [
+    "packages/basic",
+    "packages/reference",
+    "packages/todo-app",
+    "packages/todo-app-react"
+  ],
   "devDependencies": {
     "typescript": "^4.0.3"
   }
