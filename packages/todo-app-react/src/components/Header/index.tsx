@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-const Header =  () => {
+const Header: React.FC =  () => {
   return (
     <Layout>
       <h1>Todos</h1>
@@ -18,7 +18,9 @@ const Layout = styled.header`
     margin: 0;
     color: #fff;
     font-size: 5rem;
-    font-weight: 100;
+    font-weight: 900;
+    font-family: "ProFont", sans-serif;
+    user-select: none;
   }
 `
 
