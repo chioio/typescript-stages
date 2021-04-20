@@ -1,39 +1,48 @@
-import { useContext, useReducer } from 'react'
-import { Todo, AppRoutes } from 'src/typings'
+import { useState, useContext, ReactElement } from 'react'
+import { Todo } from 'src/typings'
 import AppContext from 'src/context/TodoAppContext'
-import AppReducer from 'src/store/AppStore'
 import styled from 'styled-components'
 import TodoItem from './TodoItem'
 
-interface Props {
-  path: AppRoutes
+enum Filters {
+  ALL = 'ALL',
+  ACTIVE = 'ACTIVE',
+  COMPLETED = 'COMPLETED',
+}
+interface IFilterState {
+  filter: string
 }
 
-const Filter = () => {
-  return (
-    <div className="filter">
-      <span>
-        {/* <Link className={path.all ? 'selected' : ''} to={path.all}> */}
-        All
-        {/* </Link> */}
-      </span>
-      <span>
-        {/* <Link className={path.active ? 'selected': ''} to={path.active}> */}
-        Active
-        {/* </Link> */}
-      </span>
-      <span>
-        {/* <Link className={path.completed ? 'selected': ''} to={path.completed}> */}
-        Completed
-        {/* </Link> */}
-      </span>
-    </div>
-  )
-}
-
-const TodoList: React.FC<Props> = ({ path }) => {
+const TodoList: React.FC = () => {
   const { appContext } = useContext(AppContext)
-  const [appState, dispatch] = useReducer(AppReducer, appContext)
+  const [filterState, setFilterState] = useState<IFilterState>({
+    filter: Filters.ALL,
+  })
+
+  const FiltersButton: React.FC = () => {
+    return (
+      <div className="filters">
+        <button
+          className={filterState.filter === Filters.ALL ? 'active' : ''}
+          onClick={() => setFilterState({ filter: Filters.ALL })}
+        >
+          All
+        </button>
+        <button
+          className={filterState.filter === Filters.ACTIVE ? 'active' : ''}
+          onClick={() => setFilterState({ filter: Filters.ACTIVE })}
+        >
+          Active
+        </button>
+        <button
+          className={filterState.filter === Filters.COMPLETED ? 'active' : ''}
+          onClick={() => setFilterState({ filter: Filters.COMPLETED })}
+        >
+          Completed
+        </button>
+      </div>
+    )
+  }
 
   return (
     <Layout>
@@ -43,7 +52,7 @@ const TodoList: React.FC<Props> = ({ path }) => {
           Complete All
         </span>
         <div className="center">
-          {appContext.todos.length > 0 ? <Filter /> : null}
+          {appContext.todos.length > 0 ? <FiltersButton /> : null}
         </div>
         <span className={appContext.todos.length === 0 ? 'un-clickable' : ''}>
           Clear All
@@ -51,22 +60,24 @@ const TodoList: React.FC<Props> = ({ path }) => {
       </div>
       {/* Todo Item List */}
       <ul className="todo-list">
-        {appState.todos
+        {appContext.todos
           .filter((todo: Todo): boolean => {
-            switch (path) {
-              case AppRoutes.ALL:
+            switch (filterState.filter) {
+              case Filters.ALL:
                 return true
-              case AppRoutes.ACTIVE:
+              case Filters.ACTIVE:
                 return todo.completed === false
-              case AppRoutes.COMPLETED:
+              case Filters.COMPLETED:
                 return todo.completed === true
               default:
                 return true
             }
           })
-          .map((todo: Todo) => {
-            return <TodoItem key={todo.id} todo={todo} />
-          })}
+          .map(
+            (todo: Todo): ReactElement => {
+              return <TodoItem key={todo.id} todo={todo} />
+            }
+          )}
       </ul>
       {/* Bottom Features */}
       <div className="bottom-features">
@@ -100,6 +111,7 @@ const Layout = styled.div`
     right: 0;
     padding: 0.4rem 1rem;
     background-color: #3d414a90;
+    --webkit-backdrop-filter: blur(5px);
     backdrop-filter: blur(5px);
     font-size: 0.8rem;
   }
@@ -115,7 +127,7 @@ const Layout = styled.div`
     }
 
     .center {
-      height: 1.75rem;
+      height: 2rem;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -128,20 +140,27 @@ const Layout = styled.div`
         box-shadow: 0 1px 1px #333740;
         border-radius: 0.2rem;
       }
-      .filter {
+      .filters {
         display: flex;
         justify-content: space-around;
+        button {
+          width: 5rem;
+          background: none;
+          outline: none;
+          border: none;
+          color: #dfdfdf;
+        }
+
+        .active {
+          border-bottom: #ff8945 solid 0.2rem;
+        }
       }
     }
   }
 
-  h2 {
-    margin: 0;
-    padding: 1rem;
-    border-bottom: 1px solid #80808030;
-    &:last-child {
-      border: none;
-    }
+  .todo-list {
+    list-style: none;
+    padding: 0 1rem;
   }
 `
 

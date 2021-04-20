@@ -32,12 +32,6 @@ export interface AppState {
   todos: TodoList
 }
 
-export enum AppRoutes {
-  ALL = '/',
-  ACTIVE = '/active',
-  COMPLETED = '/completed',
-}
-
 export enum LocalStorageKey {
   APP_TODOS = 'TODOS',
 }

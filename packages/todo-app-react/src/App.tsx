@@ -8,11 +8,7 @@ import Header from './components/Header'
 import TodoList from './components/TodoList'
 import styled from 'styled-components'
 
-interface Props {
-  path: AppRoutes
-}
-
-const App: React.FC<Props> = ({ path }) => {
+const App: React.FC<Props> = () => {
   const { appContext } = useContext(TodoAppContext)
   const [appState, dispatch] = useReducer<typeof AppReducer>(
     AppReducer,
@@ -32,7 +28,7 @@ const App: React.FC<Props> = ({ path }) => {
       <TodoApp>
         <TodoAppContext.Provider value={{ appContext: appState, dispatch }}>
           <NewTodoTextInput />
-          <TodoList path={path} />
+          <TodoList />
         </TodoAppContext.Provider>
       </TodoApp>
       <Copyright />
