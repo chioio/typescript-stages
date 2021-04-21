@@ -1,12 +1,5 @@
-import React, {
-  useEffect,
-  useReducer,
-  useContext,
-  useState,
-  createRef,
-} from 'react'
+import React, { useEffect, useContext, useState, createRef } from 'react'
 import { Todo, TodoList } from 'src/typings'
-import AppReducer from 'src/store/AppStore'
 import TodoAppContext from 'src/context/TodoAppContext'
 import styled from 'styled-components'
 
@@ -15,11 +8,8 @@ interface EditState {
 }
 
 export const TodoItem = ({ todo }: { todo: Todo }) => {
-  const { appContext } = useContext(TodoAppContext)
-  const [appState, dispatch] = useReducer<typeof AppReducer>(
-    AppReducer,
-    appContext
-  )
+  const { appContext, dispatch } = useContext(TodoAppContext)
+
   const editInput = createRef<HTMLInputElement>()
   const [editState, setEditState] = useState<EditState>({ onEdit: false })
 
@@ -27,7 +17,7 @@ export const TodoItem = ({ todo }: { todo: Todo }) => {
     e: React.ChangeEvent<HTMLInputElement>,
     onEditID: Todo['id']
   ): void => {
-    const editedTodos: TodoList = appState.todos.map((todo) => {
+    const edited: TodoList = appContext.todos.map((todo) => {
       if (todo.id === onEditID) {
         return { ...todo, content: e.target.value }
       } else {
@@ -35,11 +25,14 @@ export const TodoItem = ({ todo }: { todo: Todo }) => {
       }
     })
 
-    dispatch({ type: 'EDITED_TODO', todos: editedTodos })
+    dispatch({
+      type: 'UPDATE_TODOS',
+      todos: edited,
+    })
   }
 
   const reverseCompleted = (id: Todo['id']): void => {
-    const toggledTodos: TodoList = appState.todos.map((todo) => {
+    const toggled: TodoList = appContext.todos.map((todo) => {
       if (todo.id === id) {
         // change completed status only clicked item
         return { ...todo, completed: !todo.completed }
@@ -49,18 +42,18 @@ export const TodoItem = ({ todo }: { todo: Todo }) => {
     })
 
     dispatch({
-      type: 'COMPLETED_TODOS',
-      todos: toggledTodos,
+      type: 'UPDATE_TODOS',
+      todos: toggled,
     })
   }
 
   const removeItem = (terminate: Todo['id']): void => {
-    const removed: TodoList = appState.todos.filter(
+    const removed: TodoList = appContext.todos.filter(
       (t: Todo): boolean => t.id !== terminate
     )
 
     dispatch({
-      type: 'REMOVED_TODO',
+      type: 'UPDATE_TODOS',
       todos: removed,
     })
   }
@@ -126,6 +119,33 @@ const Layout = styled.div`
   font-size: 1.5rem;
   border-bottom: 1px solid #80808030;
 
+  .view {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.6rem 0.4rem;
+    .toggle {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 1.5rem;
+      height: 1.5rem;
+      appearance: none;
+      background: var(--primary-white-color);
+      border-radius: 0.2rem;
+      &:checked {
+        background: var(--primary-foreground-color);
+        &::after {
+          content: '✔︎';
+          color: var(--primary-white-color);
+        }
+      }
+    }
+    label {
+      flex: 1;
+      margin: 0 2rem;
+    }
+  }
+
   .edit {
     width: inherit;
     padding: 0.35rem 1rem;
@@ -165,78 +185,6 @@ const Layout = styled.div`
 
   .editing .view {
     display: none;
-  }
-
-  .toggle {
-    text-align: center;
-    width: 40px;
-    height: auto;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    margin: auto 0;
-    border: none;
-    --webkit-appearance: none;
-    appearance: none;
-    opacity: 0;
-  }
-
-  .toggle + label {
-    /*
-    Firefox requires \`#\` to be escaped - https://bugzilla.mozilla.org/show_bug.cgi?id=922433
-    IE and Edge requires *everything* to be escaped to render, so we do that instead of just the \`#\` - https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/7157459/
-    */
-    background-image: url('data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2240%22%20height%3D%2240%22%20viewBox%3D%22-10%20-18%20100%20135%22%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2250%22%20fill%3D%22none%22%20stroke%3D%22%23ededed%22%20stroke-width%3D%223%22/%3E%3C/svg%3E');
-    background-repeat: no-repeat;
-    background-position: center left;
-  }
-
-  .toggle:checked + label {
-    background-image: url('data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2240%22%20height%3D%2240%22%20viewBox%3D%22-10%20-18%20100%20135%22%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2250%22%20fill%3D%22none%22%20stroke%3D%22%23bddad5%22%20stroke-width%3D%223%22/%3E%3Cpath%20fill%3D%22%235dc2af%22%20d%3D%22M72%2025L42%2071%2027%2056l-4%204%2020%2020%2034-52z%22/%3E%3C/svg%3E');
-  }
-
-  label {
-    word-break: break-all;
-    padding: 15px 15px 15px 60px;
-    display: block;
-    line-height: 1.2;
-    transition: color 0.4s;
-  }
-
-  .completed label {
-    color: #d9d9d9;
-    text-decoration: line-through;
-  }
-
-  .destroy {
-    display: none;
-    position: absolute;
-    top: 0;
-    right: 10px;
-    bottom: 0;
-    width: 40px;
-    height: 40px;
-    margin: auto 0;
-    font-size: 30px;
-    color: #cc9a9a;
-    margin-bottom: 11px;
-    transition: color 0.2s ease-out;
-  }
-
-  .destroy:hover {
-    color: #af5b5e;
-  }
-
-  .destroy:after {
-    content: '×';
-  }
-
-  &:hover .destroy {
-    display: block;
-  }
-
-  .editing:last-child {
-    margin-bottom: -1px;
   }
 `
 

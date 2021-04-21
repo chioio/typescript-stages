@@ -7,20 +7,10 @@ const reducer = (state: AppState, action: AppAction) => {
         ...state,
         todos: [action.todo, ...state.todos],
       }
-    case 'EDITED_TODO':
+    case 'UPDATE_TODOS':
       return {
         ...state,
         todos: [...action.todos],
-      }
-    case 'REMOVED_TODO':
-      return {
-        ...state,
-        todos: [...action.todos]
-      }
-    case 'COMPLETED_TODOS':
-      return {
-        ...state,
-        todos: [...action.todos]
       }
     default:
       throw new Error()
