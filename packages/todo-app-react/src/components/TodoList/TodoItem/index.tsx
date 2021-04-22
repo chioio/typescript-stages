@@ -1,5 +1,5 @@
 import React, { useEffect, useContext, useState, createRef } from 'react'
-import { Todo, TodoList } from 'src/typings'
+import { TodoType } from 'src/typings'
 import TodoAppContext from 'src/context/TodoAppContext'
 import styled from 'styled-components'
 
@@ -7,54 +7,34 @@ interface EditState {
   onEdit: boolean
 }
 
-export const TodoItem = ({ todo }: { todo: Todo }) => {
-  const { appContext, dispatch } = useContext(TodoAppContext)
+export const TodoItem = ({ todo }: { todo: TodoType }) => {
+  const { dispatch } = useContext(TodoAppContext)
 
   const editInput = createRef<HTMLInputElement>()
   const [editState, setEditState] = useState<EditState>({ onEdit: false })
 
   const handleTodoTextEdit = (
     e: React.ChangeEvent<HTMLInputElement>,
-    onEditID: Todo['id']
+    onEditTodo: TodoType
   ): void => {
-    const edited: TodoList = appContext.todos.map((todo) => {
-      if (todo.id === onEditID) {
-        return { ...todo, content: e.target.value }
-      } else {
-        return todo
-      }
-    })
 
     dispatch({
-      type: 'UPDATE_TODOS',
-      todos: edited,
+      type: 'EDIT_TODO',
+      todo: { ...onEditTodo, content: e.target.value },
     })
   }
 
-  const reverseCompleted = (id: Todo['id']): void => {
-    const toggled: TodoList = appContext.todos.map((todo) => {
-      if (todo.id === id) {
-        // change completed status only clicked item
-        return { ...todo, completed: !todo.completed }
-      } else {
-        return todo
-      }
-    })
-
+  const reverseItemState = (onReverseTodo: TodoType): void => {
     dispatch({
-      type: 'UPDATE_TODOS',
-      todos: toggled,
+      type: 'REVERSE_TODO_STATE',
+      todo: { ...onReverseTodo },
     })
   }
 
-  const removeItem = (terminate: Todo['id']): void => {
-    const removed: TodoList = appContext.todos.filter(
-      (t: Todo): boolean => t.id !== terminate
-    )
-
+  const removeItem = (onRemoveTodo: TodoType): void => {
     dispatch({
-      type: 'UPDATE_TODOS',
-      todos: removed,
+      type: 'REMOVE_TODO',
+      todo: { ...onRemoveTodo },
     })
   }
 
@@ -66,7 +46,7 @@ export const TodoItem = ({ todo }: { todo: Todo }) => {
     if (e.currentTarget.value.trim().length > 0) {
       setEditState({ onEdit: false })
     } else {
-      removeItem(todo.id)
+      removeItem(todo)
     }
   }
 
@@ -92,10 +72,10 @@ export const TodoItem = ({ todo }: { todo: Todo }) => {
             type="checkbox"
             className="toggle"
             checked={todo.completed}
-            onChange={() => reverseCompleted(todo.id)}
+            onChange={() => reverseItemState(todo)}
           />
           <label onDoubleClick={onDoubleClick}>{todo.content}</label>
-          <button className="destroy" onClick={() => removeItem(todo.id)} />
+          <button className="destroy" onClick={() => removeItem(todo)} />
         </div>
         <input
           ref={editInput}
@@ -103,7 +83,7 @@ export const TodoItem = ({ todo }: { todo: Todo }) => {
           className="edit"
           value={todo.content}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            handleTodoTextEdit(e, todo.id)
+            handleTodoTextEdit(e, todo)
           }
           onKeyPress={(e: React.KeyboardEvent<HTMLInputElement>) =>
             submitEditText(e)

@@ -1,5 +1,5 @@
 import React, { createRef, useContext } from 'react'
-import { Todo } from '../../typings'
+import { TodoType } from '../../typings'
 import TodoAppContext from '../../context/TodoAppContext'
 import styled from 'styled-components'
 
@@ -10,14 +10,14 @@ const NewTodoTextInput = () => {
 
   const generateId = (): number =>
     appContext.todos.length > 0
-      ? Math.max(...appContext.todos.map((item) => item.id + 1))
+      ? Math.max(...appContext.todos.map((t: TodoType): number => t.id + 1))
       : 1
 
   const addTodo = (e: React.KeyboardEvent<HTMLInputElement>): void => {
     if (textInput.current === null) return
     if (e.key === 'Enter' && textInput.current.value.trim().length > 0) {
       // make new TODO object
-      const todo: Todo = {
+      const todo: TodoType = {
         id: generateId(),
         content: textInput.current.value,
         completed: false,
@@ -26,7 +26,7 @@ const NewTodoTextInput = () => {
       // add new TODO to entire Todo list
       dispatch({
         type: 'NEW_TODO',
-        todo: todo,
+        todo: { ...todo },
       })
 
       // reset text input UI value

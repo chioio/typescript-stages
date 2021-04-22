@@ -1,39 +1,46 @@
 import { LoadAppStateFromLocalStorage } from '../utils'
 
-export type Todo = {
+export type TodoType = {
   id: number
   content: string
   completed: boolean
 }
 
-export type TodoList = Todo[]
+export type TodoListType = TodoType[]
 
-export type RouteList = string[]
-
-export type AppAction =
+export type AppActionType =
   | {
       type: 'NEW_TODO'
-      todo: Todo
+      todo: TodoType
     }
   | {
-      type: 'EDITED_TODO'
-      todos: TodoList
+      type: 'EDIT_TODO'
+      todo: TodoType
     }
   | {
-      type: 'REMOVED_TODO'
-      todos: TodoList
+      type: 'REMOVE_TODO'
+      todo: TodoType
     }
   | {
-      type: 'COMPLETED_TODOS'
-      todos: TodoList
+      type: 'REVERSE_TODO_STATE'
+      todo: TodoType
+    }
+  | {
+      type: 'REVERSE_ALL_STATE'
+    }
+  | {
+      type: 'REMOVE_COMPLETED'
+    }
+  | {
+      type: 'REMOVE_ALL'
     }
 
-export interface AppState {
-  todos: TodoList
+export interface IAppState {
+  todos: TodoListType
 }
 
 export enum LocalStorageKey {
   APP_TODOS = 'TODOS',
 }
 
-export const defaultData: AppState = LoadAppStateFromLocalStorage()
+export const defaultData: IAppState = LoadAppStateFromLocalStorage()

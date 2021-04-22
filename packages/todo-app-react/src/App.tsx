@@ -1,5 +1,5 @@
 import { useEffect, useReducer, useContext } from 'react'
-import { LocalStorageKey, AppRoutes } from './typings'
+import { LocalStorageKey } from './typings'
 import NewTodoTextInput from './components/NewTodoTextInput'
 import Copyright from './components/Footer'
 import TodoAppContext from './context/TodoAppContext'
@@ -8,7 +8,7 @@ import Header from './components/Header'
 import TodoList from './components/TodoList'
 import styled from 'styled-components'
 
-const App: React.FC<Props> = () => {
+const App: React.FC = () => {
   const { appContext } = useContext(TodoAppContext)
   const [appState, dispatch] = useReducer<typeof AppReducer>(
     AppReducer,

@@ -1,10 +1,10 @@
 import { createContext, Dispatch } from 'react'
-import { AppState, AppAction } from '../typings'
+import { IAppState, AppActionType } from '../typings'
 import { LoadAppStateFromLocalStorage } from '../utils'
 
 export interface TodoAppContextProps {
-  appContext: AppState,
-  dispatch: Dispatch<AppAction>
+  appContext: IAppState,
+  dispatch: Dispatch<AppActionType>
 }
 
 export const todoAppContextDefault: TodoAppContextProps = {

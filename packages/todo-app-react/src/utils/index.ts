@@ -1,16 +1,16 @@
-import { AppState, LocalStorageKey } from '../typings'
+import { IAppState, LocalStorageKey } from '../typings'
 
-export function LoadAppStateFromLocalStorage(): AppState {
+export function LoadAppStateFromLocalStorage(): IAppState {
   const stringifiedJSON: string | null = window.localStorage.getItem(
     LocalStorageKey.APP_TODOS
   )
 
   if (typeof stringifiedJSON === 'string') {
-    const LoadedAppData: AppState = JSON.parse(stringifiedJSON)
+    const LoadedAppData: IAppState = JSON.parse(stringifiedJSON)
     return LoadedAppData
   }
 
-  const BlankAppData: AppState = { todos: [] }
+  const BlankAppData: IAppState = { todos: [] }
 
   return BlankAppData
 }

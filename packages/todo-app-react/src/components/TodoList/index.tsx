@@ -1,5 +1,5 @@
-import { useState, useContext, ReactElement } from 'react'
-import { Todo } from 'src/typings'
+import React, { useState, useContext, ReactElement } from 'react'
+import { TodoType } from 'src/typings'
 import AppContext from 'src/context/TodoAppContext'
 import styled from 'styled-components'
 import TodoItem from './TodoItem'
@@ -14,10 +14,25 @@ interface IFilterState {
 }
 
 const TodoList: React.FC = () => {
-  const { appContext } = useContext(AppContext)
+  const { appContext, dispatch } = useContext(AppContext)
+
   const [filterState, setFilterState] = useState<IFilterState>({
     filter: Filters.ALL,
   })
+
+  const isAllCompleted = appContext.todos.every((t: TodoType) => t.completed)
+
+  const reverseAllItemState = (): void => {
+    dispatch({
+      type: 'REVERSE_ALL_STATE',
+    })
+  }
+
+  const clearAllItem = ():void => {
+    dispatch({
+      type: 'REMOVE_ALL',
+    })
+  }
 
   const FiltersButton: React.FC = () => {
     return (
@@ -48,20 +63,26 @@ const TodoList: React.FC = () => {
     <Layout>
       {/* Top Features  */}
       <div className="top-features">
-        <span className={appContext.todos.length === 0 ? 'un-clickable' : ''}>
-          Complete All
-        </span>
+        <button
+          onClick={reverseAllItemState}
+          className={appContext.todos.length === 0 ? 'un-clickable' : ''}
+        >
+          {isAllCompleted ? 'Active All ' : 'Complete All'}
+        </button>
         <div className="center">
           {appContext.todos.length > 0 ? <FiltersButton /> : null}
         </div>
-        <span className={appContext.todos.length === 0 ? 'un-clickable' : ''}>
+        <button
+          onClick={clearAllItem}
+          className={appContext.todos.length === 0 ? 'un-clickable' : ''}
+        >
           Clear All
-        </span>
+        </button>
       </div>
       {/* Todo Item List */}
       <ul className="todo-list">
         {appContext.todos
-          .filter((todo: Todo): boolean => {
+          .filter((todo: TodoType): boolean => {
             switch (filterState.filter) {
               case Filters.ALL:
                 return true
@@ -74,14 +95,20 @@ const TodoList: React.FC = () => {
             }
           })
           .map(
-            (todo: Todo): ReactElement => {
+            (todo: TodoType): ReactElement => {
               return <TodoItem key={todo.id} todo={todo} />
             }
           )}
       </ul>
       {/* Bottom Features */}
       <div className="bottom-features">
-        <span>{appContext.todos.length} items left</span>
+        <span>
+          {
+            appContext.todos.filter((t: TodoType) => t.completed === false)
+              .length
+          }{' '}
+          items left
+        </span>
         <span>Clear completed</span>
       </div>
     </Layout>
@@ -114,6 +141,7 @@ const Layout = styled.div`
     --webkit-backdrop-filter: blur(5px);
     backdrop-filter: blur(5px);
     font-size: 0.8rem;
+    user-select: none;
   }
   .top-features {
     margin: 0;
@@ -122,12 +150,20 @@ const Layout = styled.div`
       user-select: none;
     }
 
+    button {
+      width: 6rem;
+      background: none;
+      outline: none;
+      border: none;
+      color: #dfdfdf;
+    }
+
     .un-clickable {
       color: #5f5f5f;
     }
 
     .center {
-      height: 2rem;
+      height: 2.5rem;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -143,14 +179,6 @@ const Layout = styled.div`
       .filters {
         display: flex;
         justify-content: space-around;
-        button {
-          width: 5rem;
-          background: none;
-          outline: none;
-          border: none;
-          color: #dfdfdf;
-        }
-
         .active {
           border-bottom: #ff8945 solid 0.2rem;
         }

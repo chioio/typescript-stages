@@ -16,3 +16,9 @@ code {
   font-family: 'ProFont';
   src: url('./assets/fonts/ProFont.ttf');
 }
+
+:root {
+  --primary-color: #282c34;
+  --primary-white-color: #ffffff;
+  --primary-foreground-color: #ff8945;
+}
