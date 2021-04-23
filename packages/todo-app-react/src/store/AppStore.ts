@@ -54,12 +54,12 @@ const reducer = (state: IAppState, action: AppActionType) => {
         todos: toggledAll,
       }
     case 'REMOVE_COMPLETED':
-      const uncompleted: TodoListType = state.todos.filter(
-        (t: TodoType) => t.completed
+      const completed: TodoListType = state.todos.filter(
+        (t: TodoType) => !t.completed
       )
       return {
         ...state,
-        todos: uncompleted,
+        todos: completed,
       }
     case 'REMOVE_ALL':
       return {

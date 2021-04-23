@@ -1,13 +1,13 @@
 import React, { createRef, useContext } from 'react'
-import { TodoType } from '../../typings'
-import TodoAppContext from '../../context/TodoAppContext'
+import TodoAppContext from 'src/context/TodoAppContext'
 import styled from 'styled-components'
+import { TodoType } from 'src/typings'
 
 const NewTodoTextInput = () => {
   const { appContext, dispatch } = useContext(TodoAppContext)
-
+  // New Todo text input
   const textInput: React.RefObject<HTMLInputElement> = createRef<HTMLInputElement>()
-
+  // Generate Todo id
   const generateId = (): number =>
     appContext.todos.length > 0
       ? Math.max(...appContext.todos.map((t: TodoType): number => t.id + 1))
@@ -53,8 +53,8 @@ const Layout = styled.div`
   input {
     width: inherit;
     padding: 0.35rem 1rem;
-    background-color: #50545a;
-    color: #fff;
+    background-color: var(--primary-text-input-bg-color);
+    color: var(--primary-white-color);
     font-size: 1.25rem;
     font-family: inherit;
     font-weight: inherit;
@@ -68,8 +68,8 @@ const Layout = styled.div`
     :focus {
       outline: none;
       padding: 0.15rem 0.8rem;
-      border: #ff8945 dashed 0.2rem;
-      background-color: #505454;
+      border: var(--primary-foreground-color) dashed 0.2rem;
+      background-color: var(--primary-text-input-bg-color);
     }
   }
 `

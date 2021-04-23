@@ -1,12 +1,12 @@
 import { useEffect, useReducer, useContext } from 'react'
-import { LocalStorageKey } from './typings'
+import Footer from './components/Footer'
+import Header from './components/Header'
 import NewTodoTextInput from './components/NewTodoTextInput'
-import Copyright from './components/Footer'
 import TodoAppContext from './context/TodoAppContext'
 import AppReducer from './store/AppStore'
-import Header from './components/Header'
 import TodoList from './components/TodoList'
 import styled from 'styled-components'
+import { LocalStorageKey } from './typings'
 
 const App: React.FC = () => {
   const { appContext } = useContext(TodoAppContext)
@@ -31,7 +31,7 @@ const App: React.FC = () => {
           <TodoList />
         </TodoAppContext.Provider>
       </TodoApp>
-      <Copyright />
+      <Footer />
     </Layout>
   )
 }

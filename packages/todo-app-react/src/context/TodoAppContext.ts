@@ -1,6 +1,6 @@
 import { createContext, Dispatch } from 'react'
-import { IAppState, AppActionType } from '../typings'
-import { LoadAppStateFromLocalStorage } from '../utils'
+import { IAppState, AppActionType } from 'src/typings'
+import { LoadAppStateFromLocalStorage } from 'src/utils'
 
 export interface TodoAppContextProps {
   appContext: IAppState,

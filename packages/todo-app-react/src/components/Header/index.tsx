@@ -13,7 +13,6 @@ const Layout = styled.header`
   align-items: center;
   justify-content: center;
   height: 10rem;
-
   h1 {
     margin: 0;
     color: #fff;

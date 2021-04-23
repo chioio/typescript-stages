@@ -3,23 +3,46 @@ import styled from 'styled-components'
 const Footer = () => {
   return (
     <Layout>
-      <span>Created by&nbsp;</span>
-      <span>Tenn Chio</span>
+      <div className="app-info">
+        <a href="">Source</a>
+        <span>&nbsp;|&nbsp;</span>
+        <a>Article</a>
+        <span>&nbsp;|&nbsp;</span>
+        <a>TodoMVC</a>
+      </div>
+      <div className="developer-info">
+        <span>Created by&nbsp;</span>
+        <a href="https://chioio.tech">Tenn Chio</a>
+      </div>
     </Layout>
   )
 }
 
 const Layout = styled.footer`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 2rem;
   margin-top: 5rem;
-  color: #ffffff;
-  line-height: 1.25rem;
-
-  span:first-child {
-    color: #bfbfbf90;
+  .app-info,
+  .developer-info {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 1.5rem;
+    color: var(--primary-white-color);
+    line-height: 1.25rem;
+    user-select: none;
+    span {
+      color: #bfbfbf90;
+      font-size: 0.8rem;
+    }
+    a {
+      color: var(--primary-white-color);
+      text-decoration: none;
+      cursor: pointer;
+      &:hover {
+        color: var(--primary-foreground-color)
+      }
+    }
+  }
+  .app-info {
     font-size: 0.8rem;
   }
 `

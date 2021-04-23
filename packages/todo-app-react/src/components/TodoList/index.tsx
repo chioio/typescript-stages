@@ -1,8 +1,8 @@
 import React, { useState, useContext, ReactElement } from 'react'
-import { TodoType } from 'src/typings'
 import AppContext from 'src/context/TodoAppContext'
-import styled from 'styled-components'
 import TodoItem from './TodoItem'
+import styled from 'styled-components'
+import { TodoType } from 'src/typings'
 
 enum Filters {
   ALL = 'ALL',
@@ -16,11 +16,16 @@ interface IFilterState {
 const TodoList: React.FC = () => {
   const { appContext, dispatch } = useContext(AppContext)
 
-  const [filterState, setFilterState] = useState<IFilterState>({
+  const [state, setState] = useState<IFilterState>({
     filter: Filters.ALL,
   })
 
-  const isAllCompleted = appContext.todos.every((t: TodoType) => t.completed)
+  const isAllCompleted = appContext.todos.every(
+    (t: TodoType): boolean => t.completed
+  )
+  const isHavingCompleted = appContext.todos.every(
+    (t: TodoType): boolean => !t.completed
+  )
 
   const reverseAllItemState = (): void => {
     dispatch({
@@ -28,9 +33,15 @@ const TodoList: React.FC = () => {
     })
   }
 
-  const clearAllItem = ():void => {
+  const clearAllItem = (): void => {
     dispatch({
       type: 'REMOVE_ALL',
+    })
+  }
+
+  const clearCompleted = (): void => {
+    dispatch({
+      type: 'REMOVE_COMPLETED',
     })
   }
 
@@ -38,20 +49,20 @@ const TodoList: React.FC = () => {
     return (
       <div className="filters">
         <button
-          className={filterState.filter === Filters.ALL ? 'active' : ''}
-          onClick={() => setFilterState({ filter: Filters.ALL })}
+          className={state.filter === Filters.ALL ? 'active' : ''}
+          onClick={() => setState({ filter: Filters.ALL })}
         >
           All
         </button>
         <button
-          className={filterState.filter === Filters.ACTIVE ? 'active' : ''}
-          onClick={() => setFilterState({ filter: Filters.ACTIVE })}
+          className={state.filter === Filters.ACTIVE ? 'active' : ''}
+          onClick={() => setState({ filter: Filters.ACTIVE })}
         >
           Active
         </button>
         <button
-          className={filterState.filter === Filters.COMPLETED ? 'active' : ''}
-          onClick={() => setFilterState({ filter: Filters.COMPLETED })}
+          className={state.filter === Filters.COMPLETED ? 'active' : ''}
+          onClick={() => setState({ filter: Filters.COMPLETED })}
         >
           Completed
         </button>
@@ -65,16 +76,17 @@ const TodoList: React.FC = () => {
       <div className="top-features">
         <button
           onClick={reverseAllItemState}
-          className={appContext.todos.length === 0 ? 'un-clickable' : ''}
+          disabled={appContext.todos.length === 0}
         >
           {isAllCompleted ? 'Active All ' : 'Complete All'}
         </button>
+        {/* Filters */}
         <div className="center">
           {appContext.todos.length > 0 ? <FiltersButton /> : null}
         </div>
         <button
           onClick={clearAllItem}
-          className={appContext.todos.length === 0 ? 'un-clickable' : ''}
+          disabled={appContext.todos.length === 0}
         >
           Clear All
         </button>
@@ -83,7 +95,7 @@ const TodoList: React.FC = () => {
       <ul className="todo-list">
         {appContext.todos
           .filter((todo: TodoType): boolean => {
-            switch (filterState.filter) {
+            switch (state.filter) {
               case Filters.ALL:
                 return true
               case Filters.ACTIVE:
@@ -104,12 +116,18 @@ const TodoList: React.FC = () => {
       <div className="bottom-features">
         <span>
           {
-            appContext.todos.filter((t: TodoType) => t.completed === false)
-              .length
+            appContext.todos.filter(
+              (t: TodoType): boolean => t.completed === false
+            ).length
           }{' '}
           items left
         </span>
-        <span>Clear completed</span>
+        <button
+          disabled={isHavingCompleted}
+          onClick={clearCompleted}
+        >
+          Clear completed
+        </button>
       </div>
     </Layout>
   )
@@ -136,32 +154,28 @@ const Layout = styled.div`
     bottom: 0;
     left: 0;
     right: 0;
+    z-index: 1;
     padding: 0.4rem 1rem;
-    background-color: #3d414a90;
-    --webkit-backdrop-filter: blur(5px);
+    background-color: #3d414a80;
     backdrop-filter: blur(5px);
     font-size: 0.8rem;
     user-select: none;
-  }
-  .top-features {
-    margin: 0;
-    span {
-      margin: 0 0.5rem;
-      user-select: none;
-    }
-
     button {
-      width: 6rem;
       background: none;
       outline: none;
       border: none;
       color: #dfdfdf;
+      font-weight: bold;
+      &:disabled {
+        color: #4f5156;
+      }
     }
-
-    .un-clickable {
-      color: #5f5f5f;
+  }
+  .top-features {
+    margin: 0;
+    button {
+      width: 6rem;
     }
-
     .center {
       height: 2.5rem;
       display: flex;
@@ -172,23 +186,25 @@ const Layout = styled.div`
         content: '';
         width: 3.5rem;
         height: 0.4rem;
-        background-color: #696c72;
+        background-color: var(--primary-color);
         box-shadow: 0 1px 1px #333740;
         border-radius: 0.2rem;
       }
       .filters {
         display: flex;
         justify-content: space-around;
+        button {
+          width: 4.8rem;
+        }
         .active {
-          border-bottom: #ff8945 solid 0.2rem;
+          border-bottom: var(--primary-foreground-color) solid 0.2rem;
         }
       }
     }
   }
-
   .todo-list {
     list-style: none;
-    padding: 0 1rem;
+    padding: 0 1.2rem;
   }
 `
 
